@@ -34,7 +34,7 @@ def index_view():
     return render_template('short_link.html', form=form)
 
 
-@app.route('/<short>')
+@app.route('/<string:short>', methods=['GET'])
 def redirect_view(short):
     url_map = URLMap.query.filter_by(short=short).first_or_404()
     return redirect(url_map.original)

@@ -12,10 +12,9 @@ SHORT_URL_MAX_LENGTH = 16
 
 @app.route('/api/id/', methods=['POST'])
 def create_short_url():
-    if request.content_type != 'application/json':
+    if not request.data:
         raise InvalidAPIUsage('Отсутствует тело запроса')
     data = request.get_json()
-    print('data', data)
     if 'url' not in data:
         raise InvalidAPIUsage('"url" является обязательным полем!')
     else:
@@ -36,14 +35,13 @@ def create_short_url():
             'Предложенный вариант короткой ссылки уже существует.'
         )
     short_url = URLMap()
-    # print('data', data)
     short_url.from_dict(data)
     db.session.add(short_url)
     db.session.commit()
     return jsonify(short_url.to_dict()), 201
 
 
-@app.route('/api/id/<string:short_id>')
+@app.route('/api/id/<string:short_id>/', methods=['GET'])
 def get_original_link(short_id):
     url_map = URLMap.query.filter_by(short=short_id).first()
     if url_map is None:
