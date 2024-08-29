@@ -3,7 +3,6 @@ from datetime import datetime, timezone
 from flask import url_for
 
 from yacut import db
-
 from .constants import SHORT_URL_MAX_LENGTH
 
 
